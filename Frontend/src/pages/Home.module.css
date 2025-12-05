@@ -1,0 +1,263 @@
+/* ===== MAIN CONTAINER ===== */
+.container {
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(to top, #000000, #030353);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ===== MOBILE MENU ICON ===== */
+.menuIcon {
+  display: none;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 25px;
+  height: 25px;
+  color: white;
+  cursor: pointer;
+  z-index: 40;
+}
+
+@media (max-width: 1024px) {
+  .menuIcon {
+    display: block;
+  }
+}
+
+/* ===== MOBILE MENU PANEL ===== */
+.menuPanel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.33);
+  backdrop-filter: blur(10px);
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  z-index: 50;
+  transition: transform 0.3s ease-in-out;
+  overflow-y: auto;
+}
+
+.menuPanel.active {
+  transform: translateX(0);
+}
+
+.menuPanel.inactive {
+  transform: translateX(100%);
+}
+
+/* ===== CLOSE BUTTON ===== */
+.closeBtn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 25px;
+  height: 25px;
+  color: white;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 24px;
+  z-index: 51;
+}
+
+.closeBtn:hover {
+  opacity: 0.8;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.logoutBtnMobile {
+  min-width: 150px;
+  height: 60px;
+  background-color: white;
+  border-radius: 9999px;
+  color: black;
+  font-weight: 600;
+  font-size: 19px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.logoutBtnMobile:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.02);
+}
+
+.customizeBtnMobile {
+  min-width: 150px;
+  height: 60px;
+  background-color: white;
+  border-radius: 9999px;
+  color: black;
+  font-weight: 600;
+  font-size: 19px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.customizeBtnMobile:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.02);
+}
+
+/* ===== DESKTOP BUTTONS ===== */
+.logoutBtnDesktop {
+  display: none;
+  min-width: 150px;
+  height: 60px;
+  background-color: white;
+  border-radius: 9999px;
+  color: black;
+  font-weight: 600;
+  font-size: 19px;
+  margin-top: 30px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+@media (min-width: 1025px) {
+  .logoutBtnDesktop {
+    display: block;
+  }
+}
+
+.logoutBtnDesktop:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.02);
+}
+
+.customizeBtnDesktop {
+  display: none;
+  min-width: 150px;
+  height: 60px;
+  background-color: white;
+  border-radius: 9999px;
+  color: black;
+  font-weight: 600;
+  font-size: 19px;
+  margin-top: 30px;
+  position: absolute;
+  top: 100px;
+  right: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+@media (min-width: 1025px) {
+  .customizeBtnDesktop {
+    display: block;
+  }
+}
+
+.customizeBtnDesktop:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.02);
+}
+
+/* ===== HISTORY SECTION ===== */
+.historyContainer {
+  width: 100%;
+  border-bottom: 2px solid #9ca3af;
+}
+
+.historyTitle {
+  color: white;
+  font-weight: 600;
+  font-size: 19px;
+  margin-bottom: 10px;
+}
+
+.historyList {
+  width: 100%;
+  height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.historyItem {
+  color: #d1d5db;
+  font-size: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.historyEmpty {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* ===== ASSISTANT IMAGE ===== */
+.assistantImage {
+  width: 300px;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 2rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.assistantImage img {
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== WELCOME TEXT ===== */
+.welcomeText {
+  color: white;
+  font-size: 30px;
+  margin-top: 30px;
+  text-align: center;
+}
+
+.assistantName {
+  color: #93c5fd;
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+.historyList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.historyList::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.historyList::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+.historyList::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
