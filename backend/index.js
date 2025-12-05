@@ -10,12 +10,32 @@ const { geminiResponse } = require('./gemini.js');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// Allowed origins for CORS
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://virtual-assistant-frontend-n8z4.onrender.com"
+];
+
+// CORS middleware
 app.use(cors({
-    origin: 'https://virtual-assistant-frontend-n8z4.onrender.com',
-    credentials: true
+    origin: function (origin, callback) {
+        // Allow requests from tools like Postman (no origin)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 }));
 
+// Handle preflight OPTIONS request
+app.options("*", cors());
+
+// Middleware
 app.use(express.json());
 app.use(cookieParser());
 
@@ -23,11 +43,13 @@ app.use(cookieParser());
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRouter);
 
-// SINGLE home route
+// Home route (optional)
+app.get("/", (req, res) => {
+    res.send("Backend running successfully!");
+});
 
-
-// Server start
+// Start server
 app.listen(PORT, () => {
     connectDB();
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
