@@ -13,8 +13,7 @@ const PORT = process.env.PORT || 5000;
 // CORS FIX (FINAL)
 app.use(cors({
     origin: [
-        "http://localhost:5173",
-        "https://virtual-assistant-frontend-n8z4.onrender.com"
+        "https://virtual-assistant-frontend-s0yn.onrender.com"
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
