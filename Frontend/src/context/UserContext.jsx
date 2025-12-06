@@ -2,69 +2,79 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-
-import { userDataContext } from './userDataContext';
+import { userDataContext } from "./userDataContext";
 
 export default function UserContext({ children }) {
   const serverUrl = "https://virtual-assistant-backend-evad.onrender.com";
-  const [userData, setUserData] = useState(null);
-  const [frontendImage , setFrontendImage] = useState(null);
-  const [backendImage , setBackendImage] = useState(null);
-  const [selectedImage , setSelectedImage] = useState(null);
 
+  const [userData, setUserData] = useState(null);
+  const [frontendImage, setFrontendImage] = useState(null);
+  const [backendImage, setBackendImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  // ✅ Fetch Current User
   const handleCurrentUser = async () => {
     try {
       const response = await axios.get(
-        `${serverUrl}/api/user/current`,
+        `${serverUrl}/api/user/current-user`,   // 👈 FIXED ROUTE
         { withCredentials: true }
       );
+
       setUserData(response.data.user);
     } catch (err) {
       console.log("Error fetching current user:", err);
     }
   };
 
-  const getGeminiResponse = async (command)=>{
-    try{
+  // ✅ Gemini API Handler
+  const getGeminiResponse = async (command) => {
+    try {
       const result = await axios.post(
         `${serverUrl}/api/user/asktoassistant`,
         { command },
         { withCredentials: true }
       );
+
       console.log("✅ Gemini API Response:", result.data);
       return result.data;
-    }
-    catch(err){
+    } catch (err) {
       const status = err.response?.status;
       const data = err.response?.data;
-      
-      console.error('❌ Error in getGeminiResponse:', status, data || err?.message || err);
-      
-      // Return error response with type and message for frontend to handle
+
+      console.error("❌ Error in getGeminiResponse:", status, data);
+
       return {
         type: "error",
-        response: data?.response || "Sorry, I couldn't process that request. Please try again.",
-        status: status
+        response:
+          data?.response ||
+          "Sorry, I couldn't process that request. Please try again.",
+        status: status,
       };
     }
-  }
+  };
 
+  // 🔄 On mount → Load current user
   useEffect(() => {
     handleCurrentUser();
   }, []);
 
+  // 🧩 Shared Context Values
   const value = {
     serverUrl,
     userData,
     setUserData,
-    backendImage , setBackendImage,
-    frontendImage , setFrontendImage,
-    selectedImage , setSelectedImage,
+
+    backendImage,
+    setBackendImage,
+
+    frontendImage,
+    setFrontendImage,
+
+    selectedImage,
+    setSelectedImage,
+
     getGeminiResponse,
-
   };
-
-
 
   return (
     <userDataContext.Provider value={value}>
