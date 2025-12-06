@@ -16,34 +16,18 @@ app.use(express.json());
 app.use(cookieParser());
 
 // ---------------------
-// CORS Configuration
+// CORS FIX (100% WORKING FOR RENDER)
 // ---------------------
 const allowedOrigins = [
-    "http://localhost:5173",  // local frontend
-    "https://virtual-assistant-frontend-s0yn.onrender.com" // deployed frontend
+  "http://localhost:5173",
+  "https://virtual-assistant-frontend-s0yn.onrender.com"
 ];
 
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin) return callback(null, true); 
-        if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = "CORS policy does not allow access from this origin.";
-            return callback(new Error(msg), false);
-        }
-        return callback(null, true);
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-}));
-
-// ---------------------
-// Preflight Requests (Node v22 SAFE)
-// IMPORTANT: Only regex works — "*" or "/*" cause CRASH
-// ---------------------
-app.options(/.*/, cors({
-    origin: allowedOrigins,
-    credentials: true
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 // ---------------------
@@ -56,13 +40,13 @@ app.use('/api/user', userRouter);
 // Test Route
 // ---------------------
 app.get("/", (req, res) => {
-    res.send("Backend running successfully!");
+  res.send("Backend running successfully!");
 });
 
 // ---------------------
 // Start Server + Connect DB
 // ---------------------
 app.listen(PORT, async () => {
-    await connectDB();
-    console.log(`Server is running on port ${PORT}`);
+  await connectDB();
+  console.log(`Server is running on port ${PORT}`);
 });
