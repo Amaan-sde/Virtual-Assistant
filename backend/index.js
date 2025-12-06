@@ -38,11 +38,10 @@ app.use(cors({
 }));
 
 // ---------------------
-// Preflight Requests Fix (IMPORTANT)
+// Preflight Requests (Node v22 SAFE)
+// IMPORTANT: Only regex works — "*" or "/*" cause CRASH
 // ---------------------
-// "*"" ❌ NOT VALID on Node v22 (causes path-to-regexp error)
-// "/*" ✔ VALID (use this)
-app.options("/*", cors({
+app.options(/.*/, cors({
     origin: allowedOrigins,
     credentials: true
 }));
