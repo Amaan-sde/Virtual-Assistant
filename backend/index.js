@@ -9,46 +9,60 @@ const userRouter = require('./routes/user.routes.js');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// ---------------------
 // Middleware
+// ---------------------
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS configuration
+// ---------------------
+// CORS Configuration
+// ---------------------
 const allowedOrigins = [
-    "http://localhost:5173",                       // local frontend
+    "http://localhost:5173",  // local frontend
     "https://virtual-assistant-frontend-s0yn.onrender.com" // deployed frontend
 ];
 
 app.use(cors({
-    origin: function(origin, callback){
-        if(!origin) return callback(null, true); // allow Postman, curl, etc.
-        if(allowedOrigins.indexOf(origin) === -1){
-            const msg = 'CORS policy does not allow access from this origin.';
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true); 
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = "CORS policy does not allow access from this origin.";
             return callback(new Error(msg), false);
         }
         return callback(null, true);
     },
-    credentials: true, // required for cookies
+    credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// Preflight requests
-app.options("*", cors({
+// ---------------------
+// Preflight Requests Fix (IMPORTANT)
+// ---------------------
+// "*"" ❌ NOT VALID on Node v22 (causes path-to-regexp error)
+// "/*" ✔ VALID (use this)
+app.options("/*", cors({
     origin: allowedOrigins,
     credentials: true
 }));
 
+// ---------------------
 // Routes
+// ---------------------
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRouter);
 
-// Test route
+// ---------------------
+// Test Route
+// ---------------------
 app.get("/", (req, res) => {
     res.send("Backend running successfully!");
 });
 
-// Start server and connect DB
+// ---------------------
+// Start Server + Connect DB
+// ---------------------
 app.listen(PORT, async () => {
     await connectDB();
     console.log(`Server is running on port ${PORT}`);
