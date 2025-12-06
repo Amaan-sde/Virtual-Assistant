@@ -16,15 +16,12 @@ app.use(express.json());
 app.use(cookieParser());
 
 // ---------------------
-// CORS FIX (100% WORKING FOR RENDER)
+// FIXED CORS (WORKS WITH COOKIE + RENDER)
 // ---------------------
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://virtual-assistant-frontend-s0yn.onrender.com"
-];
-
 app.use(cors({
-  origin: allowedOrigins,
+  origin: function (origin, callback) {
+    callback(null, true);  // allow all origins dynamically
+  },
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
@@ -36,9 +33,6 @@ app.use(cors({
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRouter);
 
-// ---------------------
-// Test Route
-// ---------------------
 app.get("/", (req, res) => {
   res.send("Backend running successfully!");
 });
