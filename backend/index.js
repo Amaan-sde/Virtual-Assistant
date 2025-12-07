@@ -5,7 +5,6 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/auth.routes.js");
 const cookieParser = require("cookie-parser");
 const userRouter = require("./routes/user.routes.js");
-const { geminiResponse } = require("./gemini.js");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,19 +15,36 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // -------------------------
-// CORS FIXED FOR FRONTEND + LOCALHOST
+// CORS (FULLY FIXED FOR RENDER)
 // -------------------------
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://virtual-assistant-gmxi.onrender.com", // YOUR FRONTEND URL
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://virtual-assistant-gmxi.onrender.com", // YOUR FRONTEND URL
-    ],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS: " + origin));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+// required for preflight requests
+app.options("*", (req, res) => {
+  res.header("Access-Control-Allow-Origin", req.headers.origin);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  return res.sendStatus(200);
+});
 
 // -------------------------
 // MIDDLEWARE
