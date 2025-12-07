@@ -10,24 +10,31 @@ const { geminiResponse } = require('./gemini.js');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Connect DB FIRST
+connectDB();
+
 // Middleware
 app.use(cors({
-    origin: 'https://virtual-assistant-gmxi.onrender.com',
+    origin: [
+        "http://localhost:5173",
+        "https://virtual-assistant-gmxi.onrender.com"   // your frontend URL here
+    ],
     credentials: true
 }));
 
 app.use(express.json());
 app.use(cookieParser());
 
+// Default Route (IMPORTANT for Render!)
+app.get("/", (req, res) => {
+    res.send("Backend is running...");
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRouter);
 
-// SINGLE home route
-
-
-// Server start
+// Start server
 app.listen(PORT, () => {
-    connectDB();
     console.log(`Server is running on port ${PORT}`);
 });
